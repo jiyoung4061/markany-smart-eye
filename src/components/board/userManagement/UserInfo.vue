@@ -202,7 +202,7 @@
                 </tbody>
 
               </table>
-                      
+
           </div>
         <span slot="footer" v-on:click="UserInfoModifyModal = false">
             <button class="button-cancle" v-on:click="userInfoCancle">취소</button>
@@ -229,14 +229,14 @@
                   </tr>
               </thead>
               <tbody>
-                  <tr class="table1-body" v-for="(todo,i) in todos" :key="i" >
+                  <tr class="table1-body" v-for="(todo,i) in this.todos.data" :key="i" >
                       <td></td>
                       <td><input type="checkbox" :value="todo.id" v-model="selected"></td>
                       <td>{{ i+1 }}</td>
-                      <td>{{ todo.id }}</td>
-                      <td>{{ todo.name }}</td>
+                      <td>{{ todo.idString }}</td>
+                      <td>{{ todo.firstName }} {{todo.lastName}}</td>
                       <td>{{ todo.team }}</td>
-                      <td>{{ todo.position }}</td>
+                      <td>{{ todo.rank }}</td>
                       <td>{{ todo.role }}</td>
                   </tr>
               </tbody>
@@ -249,6 +249,7 @@
 
 <script>
 import Modal from '../../../common/Modal'
+import axios from 'axios'
 import SideBar from '../../common/SideBar.vue'
 
 export default {
@@ -288,11 +289,15 @@ export default {
                 this.users = res.data
             })
         },
-        getTodos(){
-            this.$http.get('http://localhost:3000/todoData')
+        getTodos(){ // user list
+            axios.get('http://localhost:8888/api/user/userlist',{
+              headers : {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type' : 'application/json; charset=utf-8'
+              }
+            })
             .then((res) => {
-                console.log('getTodos:', res.data)
-                this.todos = res.data
+              this.todos = res.data
             })
         },
         getCCTVs(){
